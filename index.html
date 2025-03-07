@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FB CREATE POST</title>
+    <style>
+        /* Default font and body styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        .create-post-container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .post-button {
+            background-color: #e4e6eb;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: gray;
+            cursor: not-allowed;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .user-details {
+            margin-left: 10px; /* Moves name and buttons slightly right */
+        }
+
+        .user-name {
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-block;
+            border-bottom: 1px dashed transparent;
+        }
+
+        .user-name:hover {
+            border-bottom: 1px dashed black;
+        }
+
+        .options {
+            margin-top: 3px;
+        }
+
+        .option-button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .post-input {
+            width: 90%;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            padding: 10px;
+            min-height: 460px;
+            resize: none;
+        }
+
+        .color-picker {
+            display: flex;
+            padding: 10px;
+        }
+
+        .color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .white { background-color: white; border: 1px solid #ddd; }
+        .light-gray { background-color: #f0f2f5; }
+        .purple { background-color: #c22ded; }
+        .red { background-color: #ff0000; }
+        .black { background-color: #000; }
+        .gradient { background: linear-gradient(45deg, #c22ded, #ff6a00); }
+
+        .more-button {
+            font-size: 24px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+        .footer-icons {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .footer-icons img {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+         
+       .dropdowns {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        /* Fonts */
+        @font-face {
+            font-family: 'PostEN';
+            src: url('/XYLON.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'PostBN';
+            src: url('/FUCK.ttf') format('truetype');
+        }
+
+    </style>
+</head>
+<body>
+    <div class="create-post-container">
+        <div class="header">
+            <button class="back-button"><img src="https://i.ibb.co/RG15nvZQ/back.png" height="35" width="35"></button>
+            <span class="title">Create post</span>
+            <button class="post-button" disabled>POST</button>
+        </div>
+
+        <div class="user-info">
+            <div class="profile-container">
+                <img src="default-profile.png" id="profile-pic" alt="Profile" class="profile-pic" onclick="document.getElementById('profile-upload').click();">
+                <input type="file" id="profile-upload" class="hidden" accept="image/*" onchange="previewProfilePic(event)">
+            </div>
+            <div class="user-details">
+                <span id="user-name" class="user-name" onclick="editName()">DARK SERIES XYLON</span>
+                <input type="text" id="name-input" class="hidden" onblur="saveName()" onkeypress="handleKeyPress(event)">
+                <div class="dropdowns">
+            <select>
+                <option>Friends</option>
+                <option>Public</option>
+                <option>Only Me</option>
+            </select>
+            <select>
+                <option>Aum</option>
+                <option>Travel</option>
+                <option>Work</option>
+                <option>Memories</option>
+            </select>
+            <select>
+                <option>AI label off</option>
+                </select>
+        </div>
+            </div>
+        </div>
+
+        <textarea class="post-input" id="post-content" placeholder="What's on your mind?" oninput="enablePostButton(); detectLanguage();"></textarea>
+
+        <div class="color-picker">
+            <div class="color white"></div>
+            <div class="color light-gray"></div>
+            <div class="color purple"></div>
+            <div class="color red"></div>
+            <div class="color black"></div>
+            <div class="color gradient"></div>
+            <div class="more-button">&#x22EE;</div>
+        </div>
+
+        <div class="footer-icons">
+            <img src="https://i.ibb.co/Txbr9pSD/image-icon.jpg" alt="Image">
+            <img src="https://i.ibb.co/rGfcqxM9/tag-icon.png" alt="Tag">
+            <img src="https://i.ibb.co/r23Xytn3/smiley-icon.png" alt="Feeling">
+            <img src="https://i.ibb.co/HDCKswRn/location-icon.png" alt="Location">
+            <img src="https://i.ibb.co/qwYn558/more-icon.png" alt="More">
+        </div>
+    </div>
+
+    <script>
+        function editName() {
+            document.getElementById('user-name').classList.add('hidden');
+            document.getElementById('name-input').classList.remove('hidden');
+            document.getElementById('name-input').value = document.getElementById('user-name').innerText;
+            document.getElementById('name-input').focus();
+        }
+
+        function saveName() {
+            let input = document.getElementById('name-input');
+            let name = input.value.trim();
+            if (name !== "") {
+                document.getElementById('user-name').innerText = name;
+            }
+            document.getElementById('user-name').classList.remove('hidden');
+            document.getElementById('name-input').classList.add('hidden');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                saveName();
+            }
+        }
+
+        function enablePostButton() {
+            let postContent = document.getElementById('post-content').value.trim();
+            let postButton = document.querySelector('.post-button');
+            if (postContent.length > 0) {
+                postButton.style.backgroundColor = '#1877f2';
+                postButton.style.color = 'white';
+                postButton.style.cursor = 'pointer';
+                postButton.disabled = false;
+            } else {
+                postButton.style.backgroundColor = '#e4e6eb';
+                postButton.style.color = 'gray';
+                postButton.style.cursor = 'not-allowed';
+                postButton.disabled = true;
+            }
+        }
+
+        function previewProfilePic(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+  
+              reader.onload = function (e) {
+                    document.getElementById('profile-pic').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function detectLanguage() {
+            let postContent = document.getElementById('post-content').value;
+            let englishRegex = /[a-zA-Z]/;
+            let bengaliRegex = /[\u0980-\u09FF]/;
+
+            if (englishRegex.test(postContent)) {
+                document.getElementById('post-content').style.fontFamily = 'PostEN, Arial, sans-serif';
+            } else if (bengaliRegex.test(postContent)) {
+                document.getElementById('post-content').style.fontFamily = 'PostBN, Arial, sans-serif';
+            }
+        }
+    </script>
+</body>
+</html>
